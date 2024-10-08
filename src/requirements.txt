@@ -1,0 +1,10 @@
+asttokens==2.4.1
+astunparse==1.6.3
+mindspore @ https://ms-release.obs.cn-north-4.myhuaweicloud.com/2.2.14/MindSpore/unified/x86_64/mindspore-2.2.14-cp39-cp39-linux_x86_64.whl#sha256=66d1864ccb722c82c1fa176b6277d33301b700b326e4932a7fa30209ccce57c1
+numpy==2.0.2
+packaging==24.1
+pillow==10.4.0
+protobuf==5.28.2
+psutil==6.0.0
+scipy==1.13.1
+six==1.16.0
