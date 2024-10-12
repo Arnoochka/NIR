@@ -1,0 +1,8 @@
+Colossal-AI: https://colossalai.org/docs/get_started/installation/
+Accelerate: https://github.com/huggingface/accelerate
+Pytorch
+TensorFlow
+MindSpore
+DeepSpeed: https://www.deepspeed.ai/
+nntile (optionally): https://github.com/nntile/nntile
+Megatron (они немножко про другое, но, возможно, будет полезно)
