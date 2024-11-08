@@ -1,4 +1,0 @@
-Overall Security and Trustworthiness Design: https://www.mindspore.cn/mindarmour/docs/en/master/design.html
-Glossary: https://www.mindspore.cn/docs/en/r2.3.1/design/glossary.html
-Дробление пайплана 
-Semi-automatic

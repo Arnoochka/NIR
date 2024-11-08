@@ -1,0 +1,6 @@
+Colossal-AI: https://colossalai.org/docs/get_started/installation/
+Accelerate: https://github.com/huggingface/accelerate
+DeepSpeed: https://www.deepspeed.ai/
+nntile (optionally): https://githunb.com/nntile/nntile
+-------------------------------------------
+Статья по screduler:https://arxiv.org/html/2406.03488v1

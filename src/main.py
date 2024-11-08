@@ -1,72 +1,65 @@
-import numpy as np
+import os
 import mindspore as ms
-import mindspore.ops as ops
-from mindspore.common.initializer import initializer
-from mindspore.nn import Optimizer
-_adam_opt = ops.MultitypeFuncGraph("adam_opt")
-host_assign = ops.Assign()
-host_assign.set_device("CPU")
-host_cast = ops.Cast()
-host_cast.set_device("CPU")
-device_cast = ops.Cast()
+import mindspore.dataset as ds
+from mindspore import nn, train
+from mindspore.communication import init
 
-@_adam_opt.register("Function", "Tensor", "Tensor", "Tensor", "Tensor", "Number", "Tensor", "Tensor", "Tensor",
-                    "Tensor", "Bool", "Bool")
-def _update_run_kernel(opt, beta1, beta2, eps, lr, weight_decay, param, m, v, gradient, decay_flags, optim_filter):
-    """
-    Update parameters by AdamWeightDecay op.
-    """
-    success = True
-    if optim_filter:
-        param32 = host_cast(param, ms.float32)
-        gradient = device_cast(gradient, ms.float32)
-        if decay_flags:
-            next_param = opt(param32, m, v, lr, beta1, beta2, eps, weight_decay, gradient)
-        else:
-            next_param = opt(param32, m, v, lr, beta1, beta2, eps, 0.0, gradient)
-        ret = host_assign(param, host_cast(ops.depend(param32, next_param), ops.dtype(param)))
-        return ops.depend(success, ret)
-    return success
+ms.set_context(mode=ms.GRAPH_MODE)
+ms.set_auto_parallel_context(parallel_mode=ms.ParallelMode.SEMI_AUTO_PARALLEL, pipeline_stages=1)
+init()
+ms.set_seed(1)
 
-class AdamWeightDecayOp(Optimizer):
-    def __init__(self, params, learning_rate=1e-3, beta1=0.9, beta2=0.999, eps=1e-6, weight_decay=0.0):
-        super(AdamWeightDecayOp, self).__init__(learning_rate, params, weight_decay)
-        self.beta1 = ms.Tensor(np.array([beta1]).astype(np.float32))
-        self.beta2 = ms.Tensor(np.array([beta2]).astype(np.float32))
-        self.eps = ms.Tensor(np.array([eps]).astype(np.float32))
-        self.moments1 = self.clone_param32(prefix="adam_m", init='zeros')
-        self.moments2 = self.clone_param32(prefix="adam_v", init='zeros')
-        self.opt = ops.AdamWeightDecay()
-        self.hyper_map = ops.HyperMap()
-        self.opt.set_device("CPU")
+class Network(nn.Cell):
+    """Network"""
+    def __init__(self):
+        super().__init__()
+        self.flatten = nn.Flatten()
+        self.layer1 = nn.Dense(28*28, 512)
+        self.relu1 = nn.ReLU()
+        self.layer2 = nn.Dense(512, 512)
+        self.relu2 = nn.ReLU()
+        self.layer3 = nn.Dense(512, 10)
 
-    def construct(self, gradients):
-        """AdamWeightDecayOp"""
-        lr = self.get_lr()
-        if self.is_group:
-            if self.is_group_lr:
-                optim_result = self.map_reverse(ops.partial(_adam_opt, self.opt, self.beta1, self.beta2, self.eps),
-                                                lr, self.weight_decay, self.parameters, self.moments1, self.moments2,
-                                                gradients, self.decay_flags, self.optim_filter)
-            else:
-                optim_result = self.map_reverse(ops.partial(_adam_opt, self.opt, self.beta1, self.beta2, self.eps, lr),
-                                                self.weight_decay, self.parameters, self.moments1, self.moments2,
-                                                gradients, self.decay_flags, self.optim_filter)
-        else:
-            optim_result = self.map_reverse(ops.partial(_adam_opt, self.opt, self.beta1, self.beta2, self.eps, lr,
-                                                        self.weight_decay), self.parameters, self.moments1, self.moments2,
-                                            gradients, self.decay_flags, self.optim_filter)
-        return optim_result
+    def construct(self, x):
+        x = self.flatten(x)
+        x = self.layer1(x)
+        x = self.relu1(x)
+        x = self.layer2(x)
+        x = self.relu2(x)
+        logits = self.layer3(x)
+        return logits
 
-    def clone_param32(self, prefix, init=None):
-        new = []
-        for old_param in self.parameters:
-            param_init = init
-            if init is None:
-                param_init = old_param.init
-            new_state = old_param.clone()
-            new_state.set_dtype(ms.float32)
-            new_state.set_data(initializer(param_init, shape=old_param.shape, dtype=ms.float32))
-            new_state.name = prefix + '.' + new_state.name
-            new.append(new_state)
-        return ms.ParameterTuple(new)
+net = Network()
+net.layer1.pipeline_stage = 0
+net.relu1.pipeline_stage = 0
+net.layer2.pipeline_stage = 0
+net.relu2.pipeline_stage = 0
+net.layer3.pipeline_stage = 0
+
+def create_dataset(batch_size):
+    """create dataset"""
+    dataset_path = os.getenv("DATA_PATH")
+    dataset = ds.MnistDataset(dataset_path)
+    image_transforms = [
+        ds.vision.Rescale(1.0 / 255.0, 0),
+        ds.vision.Normalize(mean=(0.1307,), std=(0.3081,)),
+        ds.vision.HWC2CHW()
+    ]
+    label_transform = ds.transforms.TypeCast(ms.int32)
+    dataset = dataset.map(image_transforms, 'image')
+    dataset = dataset.map(label_transform, 'label')
+    dataset = dataset.batch(batch_size)
+    return dataset
+
+data_set = create_dataset(32)
+
+optimizer = nn.SGD(net.trainable_params(), 1e-2)
+loss_fn = nn.CrossEntropyLoss()
+loss_cb = train.LossMonitor()
+net_with_grads = nn.PipelineCell(nn.WithLossCell(net, loss_fn), 8)
+model = ms.Model(net_with_grads, optimizer=optimizer)
+model.train(3, data_set, callbacks=[loss_cb], dataset_sink_mode=True)
+
+"""
+В этом коде используется разделение на 4 MicroBatch. При этом используется конвеер всего из 2-х карт. 
+"""
