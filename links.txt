@@ -2,5 +2,17 @@ Colossal-AI: https://colossalai.org/docs/get_started/installation/
 Accelerate: https://github.com/huggingface/accelerate
 DeepSpeed: https://www.deepspeed.ai/
 nntile (optionally): https://githunb.com/nntile/nntile
+Megatron-LM
 -------------------------------------------
-Статья по screduler:https://arxiv.org/html/2406.03488v1
+Megatron-LM: Training Multi-Billion Parameter Language Models Using Model Parallelism: https://arxiv.org/pdf/1909.08053
+Reducing Activation Recomputationin Large Transformer Models: https://arxiv.org/pdf/2205.05198
+
+DISCO: https://arxiv.org/abs/2302.11180?utm_source=chatgpt.com (Sparce)
+27, 30, 25, 55, 45
+Heterogenius devices: https://iqua.ece.toronto.edu/papers/chenghao-infocom22.pdf?utm_source=chatgpt.com
+ZeRO: https://arxiv.org/abs/1910.02054 (здесь про data-parallelism больше)
+Partitioning Sparce DNN: https://arxiv.org/pdf/2104.11805 (SGD)
+
+Horizontal + Vertical: https://arxiv.org/pdf/2407.14843
+
+Обзорщик статей: https://arxiv.org/pdf/2405.03360

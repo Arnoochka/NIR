@@ -15,26 +15,13 @@ class Network(nn.Cell):
         super().__init__()
         self.flatten = nn.Flatten()
         self.layer1 = nn.Dense(28*28, 512)
-        self.relu1 = nn.ReLU()
-        self.layer2 = nn.Dense(512, 512)
-        self.relu2 = nn.ReLU()
-        self.layer3 = nn.Dense(512, 10)
 
     def construct(self, x):
         x = self.flatten(x)
-        x = self.layer1(x)
-        x = self.relu1(x)
-        x = self.layer2(x)
-        x = self.relu2(x)
-        logits = self.layer3(x)
-        return logits
+        return x
 
 net = Network()
 net.layer1.pipeline_stage = 0
-net.relu1.pipeline_stage = 0
-net.layer2.pipeline_stage = 0
-net.relu2.pipeline_stage = 0
-net.layer3.pipeline_stage = 0
 
 def create_dataset(batch_size):
     """create dataset"""
@@ -55,11 +42,14 @@ data_set = create_dataset(32)
 
 optimizer = nn.SGD(net.trainable_params(), 1e-2)
 loss_fn = nn.CrossEntropyLoss()
+
 loss_cb = train.LossMonitor()
-net_with_grads = nn.PipelineCell(nn.WithLossCell(net, loss_fn), 8)
+net_with_grads = nn.PipelineCell(nn.WithLossCell(net, loss_fn), 16)
 model = ms.Model(net_with_grads, optimizer=optimizer)
-model.train(3, data_set, callbacks=[loss_cb], dataset_sink_mode=True)
+model.train(1, data_set, callbacks=[loss_cb], dataset_sink_mode=True)
 
 """
 В этом коде используется разделение на 4 MicroBatch. При этом используется конвеер всего из 2-х карт. 
 """
+
+
