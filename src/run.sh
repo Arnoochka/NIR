@@ -15,4 +15,7 @@ if [ ! -d "${EXEC_PATH}/MNIST_Data" ]; then
 fi
 export DATA_PATH=${EXEC_PATH}/MNIST_Data/train/
 
-mpirun -np 1 --output-filename log_output --merge-stderr-to-stdout python main.py
+# mpirun -np 2 --output-filename log_output --merge-stderr-to-stdout python tensor.py > tensor.txt
+mpirun -np 2 --output-filename log_output --merge-stderr-to-stdout python pipeline.py > pipeline.txt
+# mpirun -np 2 --output-filename log_output --merge-stderr-to-stdout python sharding.py > sharding.txt
+# mpirun -np 2 --output-filename log_output --merge-stderr-to-stdout python single.py > single.txt
