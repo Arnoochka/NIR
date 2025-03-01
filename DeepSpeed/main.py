@@ -4,8 +4,8 @@ import torch
 from transformers import pipeline
 
 local_rank = int(os.getenv('LOCAL_RANK', '0'))
-world_size = int(os.getenv('WORLD_SIZE', '1'))
-generator = pipeline('text-generation', model='EleutherAI/gpt-neo-2.7B',
+world_size = int(os.getenv('WORLD_SIZE', '2'))
+generator = pipeline('text-generation', model='gpt2-large',
                      device=local_rank)
 
 
