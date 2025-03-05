@@ -5,7 +5,7 @@ from transformers import pipeline
 
 local_rank = int(os.getenv('LOCAL_RANK', '0'))
 world_size = int(os.getenv('WORLD_SIZE', '1'))
-generator = pipeline('text-generation', model='gpt2-large',
+generator = pipeline('text-generation', model='gpt2',
                      device=local_rank)
 
 
