@@ -1,0 +1,4 @@
+deepspeed>=0.10.1
+torch
+packaging
+accelerate 

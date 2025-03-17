@@ -1,0 +1,15 @@
+[2025-03-13 01:06:53,217] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-03-13 01:06:57,107] [WARNING] [runner.py:215:fetch_hostfile] Unable to find hostfile, will proceed with training with local resources only.
+[2025-03-13 01:06:57,107] [INFO] [runner.py:607:main] cmd = /home/victor/anaconda3/envs/deepspeed/bin/python3.12 -u -m deepspeed.launcher.launch --world_info=eyJsb2NhbGhvc3QiOiBbMF19 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None run_model.py --model bigscience/bloom --batch-size 80 --cpu-offload --prompt-len 512 --gen-len 32 --cpu-offload --kv-offload
+[2025-03-13 01:06:59,070] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-03-13 01:07:01,927] [INFO] [launch.py:146:main] WORLD INFO DICT: {'localhost': [0]}
+[2025-03-13 01:07:01,927] [INFO] [launch.py:152:main] nnodes=1, num_local_procs=1, node_rank=0
+[2025-03-13 01:07:01,927] [INFO] [launch.py:163:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0]})
+[2025-03-13 01:07:01,927] [INFO] [launch.py:164:main] dist_world_size=1
+[2025-03-13 01:07:01,927] [INFO] [launch.py:168:main] Setting CUDA_VISIBLE_DEVICES=0
+[2025-03-13 01:07:01,928] [INFO] [launch.py:256:main] process 30251 spawned with command: ['/home/victor/anaconda3/envs/deepspeed/bin/python3.12', '-u', 'run_model.py', '--local_rank=0', '--model', 'bigscience/bloom', '--batch-size', '80', '--cpu-offload', '--prompt-len', '512', '--gen-len', '32', '--cpu-offload', '--kv-offload']
+[2025-03-13 01:07:03,904] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-03-13 01:07:07,447] [INFO] [comm.py:658:init_distributed] cdb=None
+[2025-03-13 01:07:07,448] [INFO] [comm.py:689:init_distributed] Initializing TorchBackend in DeepSpeed with backend nccl
+load model
+Downloading shards:   0%|          | 0/72 [00:00<?, ?it/s]
