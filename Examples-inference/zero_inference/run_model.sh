@@ -1,14 +1,15 @@
 #!/bin/sh
 
-MODEL_NAME=bigscience/bloom # ONLY OPT AND BLOOM MODELS ARE SUPPORTED FOR NOW
-BATCHSIZE=80 # batch size
+MODEL_NAME=facebook/opt-30b # ONLY OPT AND BLOOM MODELS ARE SUPPORTED FOR NOW
+BATCHSIZE=3 # batch size
 PROMPT_LEN=512 # the length of the prompt
 GEN_LEN=32 # number of tokens to generate
 
 USE_CPU_OFFLOAD=1 # whether to use model weights cpu offloading when running with deepspeed zero inference
 USE_KV_OFFLOAD=1 # whether to use kv cache cpu offloading when running with deepspeed zero inference
-USE_HF_MODEL=0 # whether to use the original HF model(no kv cache offloading support) or not
+USE_HF_MODEL=1 # whether to use the original HF model(no kv cache offloading support) or not
 USE_QUANT=0 # whether to use model weigths quantization or not
+logger="logger.log"
 
 if [ $USE_CPU_OFFLOAD -eq 1 ]; then
     CPU_OFFLOAD="--cpu-offload"
@@ -39,4 +40,4 @@ fi
 # deepspeed --num_gpus 1 run_model.py --model bigscience/bloom-560m --batch-size 3 --cpu-offload  --kv-offload
 # deepspeed --num_gpus 1 run_model.py --model facebook/opt-125m --batch-size 3 --cpu-offload --kv-offload
 
-deepspeed --num_gpus 1 run_model.py --model ${MODEL_NAME} --batch-size ${BATCHSIZE} --cpu-offload --prompt-len ${PROMPT_LEN} --gen-len ${GEN_LEN} ${CPU_OFFLOAD} ${KV_OFFLOAD} ${QUANT_BTIS}
+deepspeed --num_gpus 1 run_model.py --model ${MODEL_NAME} --batch-size ${BATCHSIZE} --prompt-len ${PROMPT_LEN} --gen-len ${GEN_LEN} ${CPU_OFFLOAD} ${KV_OFFLOAD} ${QUANT_BTIS}

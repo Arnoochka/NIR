@@ -1,0 +1,40 @@
+[2025-03-18 22:12:27,362] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+usage: run_model.py [-h] [--model MODEL] [--dummy] [--loops LOOPS]
+                    [--batch-size BATCH_SIZE] [--prompt-len PROMPT_LEN]
+                    [--gen-len GEN_LEN] [--local_rank LOCAL_RANK]
+                    [--pin-memory PIN_MEMORY] [--cpu-offload] [--disk-offload]
+                    [--offload-dir OFFLOAD_DIR] [--kv-offload]
+                    [--log-file LOG_FILE] [--verbose VERBOSE]
+                    [--quant_bits QUANT_BITS]
+                    [--quant_group_size QUANT_GROUP_SIZE] [--pin_kv_cache]
+                    [--async_kv_offload] [--use_gds]
+
+options:
+  -h, --help            show this help message and exit
+  --model MODEL         model name or path; currently only supports OPT and
+                        BLOOM models
+  --dummy               Use dummy weights for benchmark purposes.
+  --loops LOOPS         Number of token generation iterations
+  --batch-size BATCH_SIZE
+  --prompt-len PROMPT_LEN
+                        prompt length
+  --gen-len GEN_LEN     number of tokens to generate
+  --local_rank LOCAL_RANK
+                        local rank for distributed inference
+  --pin-memory PIN_MEMORY
+                        whether to pinned CPU memory for ZeRO offloading
+  --cpu-offload         Use cpu offload.
+  --disk-offload        Use disk offload.
+  --offload-dir OFFLOAD_DIR
+                        Directory to store offloaded cache.
+  --kv-offload          Use kv cache cpu offloading.
+  --log-file LOG_FILE   log file name
+  --verbose VERBOSE     verbose level
+  --quant_bits QUANT_BITS
+                        model weight quantization bits; either 4 or 8
+  --quant_group_size QUANT_GROUP_SIZE
+                        model weight quantization group size
+  --pin_kv_cache        Allocate kv cache in pinned memory for offloading.
+  --async_kv_offload    Using non_blocking copy for kv cache offloading.
+  --use_gds             Use NVIDIA GPU DirectStorage to transfer between NVMe
+                        and GPU.

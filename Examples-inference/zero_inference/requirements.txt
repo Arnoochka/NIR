@@ -1,4 +1,6 @@
 deepspeed>=0.10.1
 torch
 packaging
-accelerate 
+accelerate
+# transformers[deepspeed]
+transformers @ git+https://github.com/tjruwase/transformers@kvcache-offload-cpu 

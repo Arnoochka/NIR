@@ -19,7 +19,7 @@ from timer import timers
 from transformers import (AutoConfig, AutoTokenizer, AutoModelForCausalLM, 
                           BloomForCausalLM, OPTForCausalLM, LlamaForCausalLM,
                         )
-from transformers.integrations.deepspeed import HfDeepSpeedConfig
+from transformers.deepspeed import HfDeepSpeedConfig
 from utils import (GB, add_model_hooks, cache_bytes,
                    get_filename, get_quant_config, hidden_bytes, meta_to_cpu,
                    model_bytes, write_benchmark_log)
@@ -113,8 +113,8 @@ def get_ds_model(
             buffer_count = 10
             buffer_size = 1*GB
         else:
-            buffer_count = 5
-            buffer_size = 2*GB
+            buffer_count = 2
+            buffer_size = 0.5*GB
 
         ds_config["zero_optimization"]["offload_param"] = dict(
             device="nvme",
@@ -123,6 +123,13 @@ def get_ds_model(
             buffer_count=buffer_count,
             buffer_size=buffer_size,
         )
+        print(dict(
+            device="nvme",
+            pin_memory=pin_memory,
+            nvme_path=offload_dir,
+            buffer_count=buffer_count,
+            buffer_size=buffer_size,
+        ))
         ds_config["aio"] = {
             "block_size": 1048576*16,
             "queue_depth": 64,
@@ -218,6 +225,8 @@ def run_generation(
         dummy_weights = filename
     else:
         dummy_weights = None
+        
+    
 
     print("load model")
     with torch.no_grad():
