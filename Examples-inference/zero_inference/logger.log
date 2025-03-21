@@ -1,6 +1,10 @@
 [2025-03-21 16:45:18,349] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
 The cache for model files in Transformers v4.22.0 has been updated. Migrating your old cache. This is a one-time only operation. You can interrupt this and resume the migration later on by calling `transformers.utils.move_cache()`.
-0it [00:00, ?it/s]0it [00:00, ?it/s]
+
+0it [00:00, ?it/s]
+0it [00:00, ?it/s]
+/home/victor/anaconda3/envs/deepspeed_zero/lib/python3.11/site-packages/transformers/utils/generic.py:260: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+[2025-03-21 16:15:49,772] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
 /home/victor/anaconda3/envs/deepspeed_zero/lib/python3.11/site-packages/transformers/utils/generic.py:260: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
   torch.utils._pytree._register_pytree_node(
 /home/victor/anaconda3/envs/deepspeed_zero/lib/python3.11/site-packages/transformers/utils/generic.py:260: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
@@ -8,6 +12,10 @@ The cache for model files in Transformers v4.22.0 has been updated. Migrating yo
 [2025-03-21 16:45:21,008] [WARNING] [runner.py:215:fetch_hostfile] Unable to find hostfile, will proceed with training with local resources only.
 [2025-03-21 16:45:21,009] [INFO] [runner.py:607:main] cmd = /home/victor/anaconda3/envs/deepspeed_zero/bin/python -u -m deepspeed.launcher.launch --world_info=eyJsb2NhbGhvc3QiOiBbMF19 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None run_model.py --model facebook/opt-6.7b --batch-size 3 --prompt-len 512 --gen-len 32 --pin-memory 1 --cpu-offload --kv-offload --disk-offload --offload-dir offload
 [2025-03-21 16:45:23,139] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+/home/victor/anaconda3/envs/deepspeed_zero/lib/python3.11/site-packages/transformers/utils/generic.py:260: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+[2025-03-21 16:15:51,492] [WARNING] [runner.py:215:fetch_hostfile] Unable to find hostfile, will proceed with training with local resources only.
+[2025-03-21 16:15:51,492] [INFO] [runner.py:607:main] cmd = /home/victor/anaconda3/envs/deepspeed_zero/bin/python -u -m deepspeed.launcher.launch --world_info=eyJsb2NhbGhvc3QiOiBbMF19 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None run_model.py --model facebook/opt-13b --batch-size 3 --prompt-len 512 --gen-len 32 --pin-memory 1 --use_gds --pin-memory 1 --cpu-offload --kv-offload --disk-offload --offload-dir offload
+[2025-03-21 16:15:52,739] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
 /home/victor/anaconda3/envs/deepspeed_zero/lib/python3.11/site-packages/transformers/utils/generic.py:260: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
   torch.utils._pytree._register_pytree_node(
 /home/victor/anaconda3/envs/deepspeed_zero/lib/python3.11/site-packages/transformers/utils/generic.py:260: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
@@ -20,13 +28,24 @@ The cache for model files in Transformers v4.22.0 has been updated. Migrating yo
 [2025-03-21 16:45:25,327] [INFO] [launch.py:256:main] process 9679 spawned with command: ['/home/victor/anaconda3/envs/deepspeed_zero/bin/python', '-u', 'run_model.py', '--local_rank=0', '--model', 'facebook/opt-6.7b', '--batch-size', '3', '--prompt-len', '512', '--gen-len', '32', '--pin-memory', '1', '--cpu-offload', '--kv-offload', '--disk-offload', '--offload-dir', 'offload']
 [2025-03-21 16:45:27,163] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
 /home/victor/anaconda3/envs/deepspeed_zero/lib/python3.11/site-packages/transformers/utils/generic.py:260: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+[2025-03-21 16:15:54,296] [INFO] [launch.py:146:main] WORLD INFO DICT: {'localhost': [0]}
+[2025-03-21 16:15:54,296] [INFO] [launch.py:152:main] nnodes=1, num_local_procs=1, node_rank=0
+[2025-03-21 16:15:54,296] [INFO] [launch.py:163:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0]})
+[2025-03-21 16:15:54,296] [INFO] [launch.py:164:main] dist_world_size=1
+[2025-03-21 16:15:54,296] [INFO] [launch.py:168:main] Setting CUDA_VISIBLE_DEVICES=0
+[2025-03-21 16:15:54,296] [INFO] [launch.py:256:main] process 58787 spawned with command: ['/home/victor/anaconda3/envs/deepspeed_zero/bin/python', '-u', 'run_model.py', '--local_rank=0', '--model', 'facebook/opt-13b', '--batch-size', '3', '--prompt-len', '512', '--gen-len', '32', '--pin-memory', '1', '--use_gds', '--pin-memory', '1', '--cpu-offload', '--kv-offload', '--disk-offload', '--offload-dir', 'offload']
+[2025-03-21 16:15:55,497] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+/home/victor/anaconda3/envs/deepspeed_zero/lib/python3.11/site-packages/transformers/utils/generic.py:260: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
   torch.utils._pytree._register_pytree_node(
 /home/victor/anaconda3/envs/deepspeed_zero/lib/python3.11/site-packages/transformers/utils/generic.py:260: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
   torch.utils._pytree._register_pytree_node(
 [2025-03-21 16:45:29,716] [INFO] [comm.py:658:init_distributed] cdb=None
 [2025-03-21 16:45:29,717] [INFO] [comm.py:689:init_distributed] Initializing TorchBackend in DeepSpeed with backend nccl
 /home/victor/anaconda3/envs/deepspeed_zero/lib/python3.11/site-packages/huggingface_hub/file_download.py:797: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+[2025-03-21 16:15:57,117] [INFO] [comm.py:658:init_distributed] cdb=None
+[2025-03-21 16:15:57,117] [INFO] [comm.py:689:init_distributed] Initializing TorchBackend in DeepSpeed with backend nccl
+/home/victor/anaconda3/envs/deepspeed_zero/lib/python3.11/site-packages/huggingface_hub/file_download.py:797: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
   warnings.warn(
 load model
-{'device': 'nvme', 'pin_memory': True, 'nvme_path': '/home/victor/NIR/Examples-inference/zero_inference/offload', 'buffer_count': 2, 'buffer_size': 536870912.0}
-Downloading shards:   0%|          | 0/2 [00:00<?, ?it/s]
+
+Downloading shards:   0%|          | 0/3 [00:00<?, ?it/s]

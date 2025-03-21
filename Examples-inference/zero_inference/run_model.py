@@ -114,30 +114,22 @@ def get_ds_model(
             buffer_size = 1*GB
         else:
             buffer_count = 2
-            buffer_size = 0.5*GB
+            buffer_size = int(0.65*GB)
 
         ds_config["zero_optimization"]["offload_param"] = dict(
             device="nvme",
             pin_memory=pin_memory,
             nvme_path=offload_dir,
             buffer_count=buffer_count,
-            buffer_size=buffer_size,
+            buffer_size=buffer_size
         )
-        print(dict(
-            device="nvme",
-            pin_memory=pin_memory,
-            nvme_path=offload_dir,
-            buffer_count=buffer_count,
-            buffer_size=buffer_size,
-        ))
         ds_config["aio"] = {
-            "block_size": 1048576*16,
-            "queue_depth": 64,
-            "thread_count": 8,
-            "use_gds": args.use_gds,
-            "single_submit": False,
-            "overlap_events": True,
-        }
+            "single_submit": "false",
+            "overlap_events": "true",
+            "num_threads": 8,
+            "queue_depth": 32,
+            "block_size": 8388608
+        }    
 
     dschf = HfDeepSpeedConfig(
         ds_config
@@ -256,7 +248,7 @@ def run_generation(
     if kv_offload:
         model.set_kv_cache_offload(True, gen_len, pin_kv_cache, async_kv_offload)
 
-    # print(model, model.config)
+    print(model, model.config)
 
 
     add_model_hooks(model)
@@ -359,6 +351,8 @@ def run_generation(
     )
     if verbose >= 1:
         print(log_str)
+        
+    torch.distributed.destroy_process_group()
 
 
 if __name__ == "__main__":

@@ -1,9 +1,7 @@
 #!/bin/sh
+export CUDA_LAUNCH_BLOCKING=1
 
-export CFLAGS="-I$CONDA_PREFIX/include"
-export LDFLAGS="-L$CONDA_PREFIX/lib -laio"
-
-MODEL_NAME=facebook/opt-6.7b 
+MODEL_NAME=facebook/opt-13b 
 BATCHSIZE=3
 PROMPT_LEN=512
 GEN_LEN=32 
@@ -13,6 +11,7 @@ USE_KV_OFFLOAD=1
 USE_HF_MODEL=0
 USE_QUANT=0
 USE_DISK_OFFLOAD=1
+USE_GDS=1
 
 OFFLOAD_DIR="offload"
 LOG_FILE="logger.log"
@@ -47,7 +46,13 @@ else
    DISK_OFFLOAD=""
 fi 
 
+if [ $USE_GDS -eq 1 ]; then
+    USE_GDS_FLAG="--use_gds"
+else
+    USE_GDS_FLAG=""
+fi
+
 deepspeed --num_gpus 1 run_model.py \
- --model ${MODEL_NAME} --batch-size ${BATCHSIZE} --prompt-len ${PROMPT_LEN} --gen-len ${GEN_LEN} --pin-memory 1\
+ --model ${MODEL_NAME} --batch-size ${BATCHSIZE} --prompt-len ${PROMPT_LEN} --gen-len ${GEN_LEN} --pin-memory 1 ${USE_GDS_FLAG} --pin-memory 1 \
  ${CPU_OFFLOAD} ${KV_OFFLOAD} ${DISK_OFFLOAD} ${QUANT_BITS} \
  &> $LOG_FILE

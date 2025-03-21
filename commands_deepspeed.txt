@@ -1,0 +1,107 @@
+[2025-03-20 23:57:05,336] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+usage: deepspeed [-h] [-H HOSTFILE] [-i INCLUDE] [-e EXCLUDE]
+                 [--num_nodes NUM_NODES]
+                 [--min_elastic_nodes MIN_ELASTIC_NODES]
+                 [--max_elastic_nodes MAX_ELASTIC_NODES] [--num_gpus NUM_GPUS]
+                 [--master_port MASTER_PORT] [--master_addr MASTER_ADDR]
+                 [--node_rank NODE_RANK] [--launcher LAUNCHER]
+                 [--launcher_args LAUNCHER_ARGS] [--module] [--no_python]
+                 [--no_local_rank] [--no_ssh] [--no_ssh_check] [--force_multi]
+                 [--save_pid] [--enable_each_rank_log ENABLE_EACH_RANK_LOG]
+                 [--autotuning {tune,run}] [--elastic_training]
+                 [--bind_cores_to_rank] [--bind_core_list BIND_CORE_LIST]
+                 [--ssh_port SSH_PORT]
+                 user_script ...
+
+DeepSpeed runner to help launch distributed multi-node/multi-gpu training
+jobs.
+
+positional arguments:
+  user_script           User script to launch, followed by any required
+                        arguments.
+  user_args
+
+options:
+  -h, --help            show this help message and exit
+  -H HOSTFILE, --hostfile HOSTFILE
+                        Hostfile path (in MPI style) that defines the resource
+                        pool available to the job (e.g., worker-0 slots=4)
+                        (default: /job/hostfile)
+  -i INCLUDE, --include INCLUDE
+                        Specify hardware resources to use during execution.
+                        String format is NODE_SPEC[@NODE_SPEC ...], where
+                        NODE_SPEC=NAME[:SLOT[,SLOT ...]]. If :SLOT is omitted,
+                        include all slots on that host. Example: -i
+                        "worker-0@worker-1:0,2" will use all slots on worker-0
+                        and slots [0, 2] on worker-1. (default: )
+  -e EXCLUDE, --exclude EXCLUDE
+                        Specify hardware resources to NOT use during
+                        execution. Mutually exclusive with --include. Resource
+                        formatting is the same as --include. Example: -e
+                        "worker-1:0" will use all available resources except
+                        slot 0 on worker-1. (default: )
+  --num_nodes NUM_NODES
+                        Total number of worker nodes to run on, this will use
+                        the top N hosts from the given hostfile. (default: -1)
+  --min_elastic_nodes MIN_ELASTIC_NODES
+                        Minimum number of nodes to run elastic training on.
+                        Default is 1 when elastic training is enabled
+                        (default: -1)
+  --max_elastic_nodes MAX_ELASTIC_NODES
+                        Maximum number of nodes to run elastic training on.
+                        Default is num_nodes when elastic training is enabled
+                        (default: -1)
+  --num_gpus NUM_GPUS, --num_accelerators NUM_GPUS
+                        Max number of GPUs to use on each node, will use [0:N)
+                        GPU ids on each node. (default: -1)
+  --master_port MASTER_PORT
+                        (optional) Port used by PyTorch distributed for
+                        communication during training. (default: 29500)
+  --master_addr MASTER_ADDR
+                        (optional) IP address of node 0, will be inferred via
+                        'hostname -I' if not specified. (default: )
+  --node_rank NODE_RANK
+                        ID of each node in the range [0:N). Only required when
+                        --no_ssh is set. (default: -1)
+  --launcher LAUNCHER   (optional) choose launcher backend for multi-node
+                        training. Options currently include PDSH, OpenMPI,
+                        MVAPICH, SLURM, MPICH, IMPI. (default: pdsh)
+  --launcher_args LAUNCHER_ARGS
+                        (optional) pass launcher specific arguments as a
+                        single quoted argument. (default: )
+  --module              Change each process to interpret the launch script as
+                        a Python module, executing with the same behavior as
+                        'python -m'. (default: False)
+  --no_python           Skip prepending the training script with 'python' -
+                        just execute it directly. (default: False)
+  --no_local_rank       Do not pass local_rank as an argument when calling the
+                        user's training script. (default: False)
+  --no_ssh              Launch training independently on each node without ssh
+                        setup. (default: False)
+  --no_ssh_check        Do not perform ssh check in multi-node launcher model
+                        (default: False)
+  --force_multi         Force multi-node launcher mode, helps in cases where
+                        user wants to launch on single remote node. (default:
+                        False)
+  --save_pid            Save file containing launcher process id (pid) at
+                        /tmp/<main-pid>.ds, where <main-pid> is the pid of the
+                        first process that invoked `deepspeed`. Useful when
+                        launching deepspeed processes programmatically.
+                        (default: False)
+  --enable_each_rank_log ENABLE_EACH_RANK_LOG
+                        redirect the stdout and stderr from each rank into
+                        different log files (default: None)
+  --autotuning {tune,run}
+                        Run DeepSpeed autotuner to discover optimal
+                        configuration parameters before running job. (default:
+                        )
+  --elastic_training    Enable elastic training support in DeepSpeed.
+                        (default: False)
+  --bind_cores_to_rank  Bind each rank to different cores of the host
+                        (default: False)
+  --bind_core_list BIND_CORE_LIST
+                        List of cores to bind to with comma separated list of
+                        numbers and range. i.e. 1,3-5,7 => [1,3,4,5,7]. When
+                        not specified, all cores on system would be used rank
+                        binding (default: None)
+  --ssh_port SSH_PORT   SSH port to use for remote connections (default: None)
