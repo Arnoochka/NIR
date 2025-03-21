@@ -1,4 +1,4 @@
-name: deepspeed
+name: deepspeed_zero
 channels:
   - conda-forge
   - defaults
